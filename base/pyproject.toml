@@ -12,6 +12,7 @@ base = "base"
 [tool.scikit-build]
 cmake.source-dir = "."
 wheel.install-dir = "base"
+cmake.build-type = "Release"
 
 [[tool.scikit-build.overrides]]
 if.from-sdist = false
