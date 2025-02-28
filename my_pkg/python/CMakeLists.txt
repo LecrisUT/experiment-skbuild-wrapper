@@ -19,11 +19,16 @@ include(GNUInstallDirs)
 # otherwise the target is not visible
 # TODO: How to relax this requirement?
 find_package(base CONFIG REQUIRED)
+find_package(Python 3.10 REQUIRED COMPONENTS Development.Module)
+find_package(pybind11 CONFIG REQUIRED)
 
 find_package(main CONFIG)
 if(NOT main_FOUND)
     add_subdirectory(.. _deps/main-build)
 endif()
+
+python_add_library(_run_mod MODULE _run_mod.cpp WITH_SOABI)
+target_link_libraries(_run_mod PRIVATE pybind11::headers base::base)
 
 # Ideally `scikit-build-core` can provide a wrapper for this since
 # It can find out if a dependency is in a build isolation or not
@@ -95,6 +100,8 @@ if(SKBUILD)
         "${base_PREFIX}/../my_pkg"
     )
     scikit_build_add_rpath(main base::base)
+    scikit_build_add_rpath(_run_mod base::base)
     scikit_build_add_wrapper(main)
     install(IMPORTED_RUNTIME_ARTIFACTS main)
+    install(TARGETS _run_mod DESTINATION ".")
 endif()
