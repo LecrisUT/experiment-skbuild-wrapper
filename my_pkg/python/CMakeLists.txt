@@ -22,7 +22,7 @@ endif()
 function(scikit_build_add_rpath requesting_target imported_target)
     # Save the rpath origin symbol
     if(APPLE)
-        set(origin_symbol "@loader_path")
+        set(origin_symbol "@rpath")
     else()
         set(origin_symbol "$ORIGIN")
     endif()
