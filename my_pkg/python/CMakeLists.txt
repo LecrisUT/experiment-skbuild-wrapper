@@ -96,7 +96,5 @@ if(SKBUILD)
     )
     scikit_build_add_rpath(main base::base)
     scikit_build_add_wrapper(main)
-    install(IMPORTED_RUNTIME_ARTIFACTS main
-        RUNTIME
-    )
+    install(IMPORTED_RUNTIME_ARTIFACTS main)
 endif()
