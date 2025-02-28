@@ -1,0 +1,42 @@
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cmake_only:
+    runs-on: ${{ matrix.runs-on }}
+    strategy:
+      matrix:
+        runs-on: [ ubuntu-latest, macos-latest, windows-latest ]
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: lukka/get-cmake@latest
+      - run: |
+          cmake -B build_base -S base
+          cmake --build build_base
+          cmake --install build_base --prefix install_base
+          cmake -B build_main -S my_pkg -Dbase_ROOT=install_base
+          cmake --build build_main
+          cmake --install build_main --prefix install_main
+          ./install_main/bin/main
+  pip:
+    runs-on: ${{ matrix.runs-on }}
+    strategy:
+      matrix:
+        runs-on: [ ubuntu-latest, macos-latest, windows-latest ]
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+      - uses: lukka/get-cmake@latest
+      - run: |
+          pip install ./my_pkg
+          main
