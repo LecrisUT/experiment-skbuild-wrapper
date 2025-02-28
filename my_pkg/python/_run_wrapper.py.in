@@ -4,6 +4,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+_runtime_dlls = "$<TARGET_RUNTIME_DLLS:@target@>"
 
 def run() -> None:
     exe_path = Path(__file__).parent
