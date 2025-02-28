@@ -74,5 +74,10 @@ jobs:
           path: |
             base/cmake-build-scikit
             my_pkg/cmake-build-scikit
-            ${{ env.pythonLocation }}
+        if: always()
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pip-${{ matrix.runs-on }}-site-packages
+          path: |
+            ${{ env.pythonLocation }}/lib/python*/site-packages/
         if: always()
