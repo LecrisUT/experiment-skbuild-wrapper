@@ -8,7 +8,9 @@ from pathlib import Path
 _runtime_dlls = "$<TARGET_RUNTIME_DLLS:@target@>"
 
 base_path = Path(__file__).parent.parent / "base"
-os.add_dll_directory(base_path/"bin")
+print(base_path)
+if os.name == 'nt':
+    os.add_dll_directory(base_path/"bin")
 
 def run() -> None:
     exe_path = Path(__file__).parent
