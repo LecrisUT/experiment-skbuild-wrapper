@@ -21,6 +21,7 @@ jobs:
           cmake -B build_base -S base
           cmake --build build_base
           cmake --install build_base --prefix install_base
+      - run: |
           cmake -B build_main -S my_pkg -Dbase_ROOT=install_base
           cmake --build build_main
           cmake --install build_main --prefix install_main
