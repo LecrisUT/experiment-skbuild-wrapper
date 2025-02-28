@@ -37,6 +37,13 @@ jobs:
           $env:PATH += ";$pwd\install_base\bin"
           .\install_main\bin\main
         if: ${{ matrix.runs-on == 'windows-latest' }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cmake-only-${{ matrix.runs-on }}
+          path: |
+            build_base
+            build_main
+        if: always()
   pip:
     runs-on: ${{ matrix.runs-on }}
     strategy:
@@ -59,3 +66,11 @@ jobs:
         if: ${{ matrix.runs-on == 'macos-latest' }}
       - run: |
           main
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pip-${{ matrix.runs-on }}
+          path: |
+            base/cmake-build-scikit
+            my_pkg/cmake-build-scikit
+            ${{ env.pythonLocation }}
+        if: always()
