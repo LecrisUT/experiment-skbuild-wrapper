@@ -19,21 +19,16 @@ include(GNUInstallDirs)
 # otherwise the target is not visible
 # TODO: How to relax this requirement?
 find_package(base CONFIG REQUIRED)
-find_package(Python 3.10 REQUIRED COMPONENTS Development.Module)
-find_package(pybind11 CONFIG REQUIRED)
 
 find_package(main CONFIG)
 if(NOT main_FOUND)
     add_subdirectory(.. _deps/main-build)
 endif()
 
-python_add_library(_run_mod MODULE _run_mod.cpp WITH_SOABI)
-target_link_libraries(_run_mod PRIVATE pybind11::headers base::base)
-
 # Ideally `scikit-build-core` can provide a wrapper for this since
 # It can find out if a dependency is in a build isolation or not
 # It can check if a package is from site-packages or the system
-function(scikit_build_add_rpath requesting_target imported_target)
+function(scikit_build_add_rpath requesting_target imported_target install_path)
     # Save the rpath origin symbol
     if(APPLE)
         set(origin_symbol "@loader_path")
@@ -68,7 +63,7 @@ function(scikit_build_add_rpath requesting_target imported_target)
     # Invert the path from CMAKE_INSTALL_LIBDIR to `wheel.install-dir`
     set(path_to_wheel_install_dir ".")
     cmake_path(RELATIVE_PATH path_to_wheel_install_dir
-        BASE_DIRECTORY ${CMAKE_INSTALL_LIBDIR}
+        BASE_DIRECTORY ${install_path}
     )
     # Construct the rpath needed by the
     cmake_path(APPEND rpath
@@ -99,9 +94,9 @@ if(SKBUILD)
     cmake_path(SET mocked_wheel_install_dir NORMALIZE
         "${base_PREFIX}/../my_pkg"
     )
-    scikit_build_add_rpath(main base::base)
-    scikit_build_add_rpath(_run_mod base::base)
+    scikit_build_add_rpath(main base::base ${CMAKE_INSTALL_BINDIR})
     scikit_build_add_wrapper(main)
     install(IMPORTED_RUNTIME_ARTIFACTS main)
-    install(TARGETS _run_mod DESTINATION ".")
 endif()
+
+add_subdirectory(bindings)
