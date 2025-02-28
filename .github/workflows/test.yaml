@@ -49,8 +49,9 @@ jobs:
           python-version: 3.x
       - uses: lukka/get-cmake@latest
       - run: |
-          pip install ./my_pkg ./base
+          pip install ./my_pkg -v
       - run: |
+          tree $pythonLocation/lib/python*/site-packages/{my_pkg*,base*}
           readelf -d $pythonLocation/lib/python*/site-packages/my_pkg/bin/main
         if: ${{ matrix.runs-on == 'ubuntu-latest' }}
       - run: |
