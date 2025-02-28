@@ -1,0 +1,15 @@
+from __future__ import annotations
+
+import subprocess
+import sys
+from pathlib import Path
+
+
+def run() -> None:
+    exe_path = Path(__file__).parent
+    exe_path = exe_path / "@CMAKE_INSTALL_BINDIR@/$<TARGET_FILE_NAME:@target@>"
+    sys.exit(
+        subprocess.call(
+            [str(exe_path)],
+        )
+    )
