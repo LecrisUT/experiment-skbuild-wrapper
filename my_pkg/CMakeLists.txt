@@ -1,5 +1,14 @@
 cmake_minimum_required(VERSION 3.30)
 
+cmake_file_api(
+    QUERY
+    API_VERSION 1
+    CODEMODEL 2
+    CACHE 2
+    CMAKEFILES 1
+    TOOLCHAINS 1
+)
+
 project(main)
 
 set(CMAKE_CXX_STANDARD 17)
