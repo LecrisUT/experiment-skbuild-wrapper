@@ -7,6 +7,8 @@ set(CMAKE_CXX_STANDARD 17)
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
 add_library(base SHARED)
 add_subdirectory(src)
 
