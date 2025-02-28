@@ -24,7 +24,18 @@ jobs:
           cmake -B build_main -S my_pkg -Dbase_ROOT=install_base
           cmake --build build_main
           cmake --install build_main --prefix install_main
+      - run: |
+          export LD_LIBRARY_PATH=$(pwd)/install-base/lib*
           ./install_main/bin/main
+        if: ${{ matrix.runs-on == 'ubuntu-latest' }}
+      - run: |
+          export DYLD_LIBRARY_PATH=$(pwd)/install-base/lib*
+          ./install_main/bin/main
+        if: ${{ matrix.runs-on == 'macos-latest' }}
+      - run: |
+          $env:PATH += ";$pwd\install-base\bin"
+          .\install_main\bin\main
+        if: ${{ matrix.runs-on == 'windows-latest' }}
   pip:
     runs-on: ${{ matrix.runs-on }}
     strategy:
