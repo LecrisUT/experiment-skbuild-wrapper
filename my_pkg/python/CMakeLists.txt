@@ -99,4 +99,6 @@ if(SKBUILD)
     install(IMPORTED_RUNTIME_ARTIFACTS main)
 endif()
 
-add_subdirectory(bindings)
+if($ENV{with_pybind})
+    add_subdirectory(bindings)
+endif()
