@@ -29,9 +29,9 @@ install(EXPORT mainTargets
     NAMESPACE main::
 )
 configure_package_config_file(cmake/mainConfig.cmake.in mainConfig.cmake
-    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/base
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/main
 )
 install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/mainConfig.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/base
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/main
 )
