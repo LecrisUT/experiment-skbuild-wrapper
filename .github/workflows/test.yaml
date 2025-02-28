@@ -40,6 +40,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: cmake-only-${{ matrix.runs-on }}
+          include-hidden-files: true
           path: |
             build_base
             build_main
@@ -69,6 +70,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: pip-${{ matrix.runs-on }}
+          include-hidden-files: true
           path: |
             base/cmake-build-scikit
             my_pkg/cmake-build-scikit
