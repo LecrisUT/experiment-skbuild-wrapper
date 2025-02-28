@@ -25,11 +25,11 @@ jobs:
           cmake --build build_main
           cmake --install build_main --prefix install_main
       - run: |
-          export LD_LIBRARY_PATH=$(pwd)/install_base/lib*
+          export LD_LIBRARY_PATH=$(echo $(pwd)/install_base/lib*)
           ./install_main/bin/main
         if: ${{ matrix.runs-on == 'ubuntu-latest' }}
       - run: |
-          export DYLD_LIBRARY_PATH=$(pwd)/install_base/lib*
+          export DYLD_LIBRARY_PATH=$(echo $(pwd)/install_base/lib*)
           ./install_main/bin/main
         if: ${{ matrix.runs-on == 'macos-latest' }}
       - run: |
