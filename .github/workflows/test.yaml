@@ -79,5 +79,5 @@ jobs:
         with:
           name: pip-${{ matrix.runs-on }}-site-packages
           path: |
-            ${{ env.pythonLocation }}/lib/python*/site-packages/
+            ${{ env.pythonLocation }}/**/site-packages/
         if: always()
