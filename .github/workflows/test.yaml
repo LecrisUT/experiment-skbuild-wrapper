@@ -19,12 +19,12 @@ jobs:
       - uses: lukka/get-cmake@latest
       - run: |
           cmake -B build_base -S base -DCMAKE_BUILD_TYPE=Release
-          cmake --build build_base
-          cmake --install build_base --prefix install_base
+          cmake --build build_base --config=release
+          cmake --install build_base --prefix install_base --config=release
       - run: |
           cmake -B build_main -S my_pkg -Dbase_ROOT=install_base  -DCMAKE_BUILD_TYPE=Release
-          cmake --build build_main
-          cmake --install build_main --prefix install_main
+          cmake --build build_main --config=release
+          cmake --install build_main --prefix install_main --config=release
       - run: |
           export LD_LIBRARY_PATH=$(echo $(pwd)/install_base/lib*)
           ./install_main/bin/main
