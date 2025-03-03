@@ -33,6 +33,7 @@ repair-wheel-command = [
     "export LD_LIBRARY_PATH=$(echo $platlib/base/lib*):$LD_LIBRARY_PATH",
     "auditwheel repair -w {dest_dir} {wheel}",
 ]
+archs = ["x86_64"]
 
 [tool.cibuildwheel.macos]
 repair-wheel-command = [

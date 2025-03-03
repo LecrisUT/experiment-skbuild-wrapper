@@ -20,3 +20,6 @@ build-dir = "cmake-build-scikit"
 
 [tool.cibuildwheel]
 build = "cp312-*"
+
+[tool.cibuildwheel.linux]
+archs = ["x86_64"]
