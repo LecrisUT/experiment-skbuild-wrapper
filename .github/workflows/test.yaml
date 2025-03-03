@@ -10,6 +10,7 @@ concurrency:
 jobs:
   manual:
     runs-on: ${{ matrix.runs-on }}
+    container: ${{ matrix.runs-on == 'ubuntu-latest' && 'quay.io/pypa/manylinux2014_x86_64' || '' }}
     strategy:
       matrix:
         runs-on: [ ubuntu-latest, macos-latest, windows-latest ]
