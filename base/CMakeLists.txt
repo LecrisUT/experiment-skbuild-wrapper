@@ -38,9 +38,3 @@ install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/baseConfig.cmake
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/base
 )
-
-if(SKBUILD)
-    install(TARGETS base
-        RUNTIME DESTINATION ${SKBUILD_SCRIPTS_DIR}
-    )
-endif()
