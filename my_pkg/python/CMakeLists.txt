@@ -97,6 +97,9 @@ if(SKBUILD)
     scikit_build_add_rpath(main base::base ${CMAKE_INSTALL_BINDIR})
     scikit_build_add_wrapper(main)
     install(IMPORTED_RUNTIME_ARTIFACTS main)
+#    install(TARGETS main
+#        RUNTIME DESTINATION ${SKBUILD_SCRIPTS_DIR}
+#    )
 endif()
 
 add_subdirectory(bindings)
