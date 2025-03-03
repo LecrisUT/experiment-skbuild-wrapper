@@ -70,7 +70,7 @@ jobs:
       - run: |
           dumpbin /IMPORTS:$pythonLocation/lib/python*/site-packages/my_pkg/bin/main
           dumpbin /IMPORTS:$pythonLocation/lib/python*/site-packages/my_pkg/_run_mod.cpython*
-        if: ${{ matrix.runs-on == 'macos-latest' }}
+        if: ${{ matrix.runs-on == 'windows-latest' }}
       - run: |
           main
         if: always()
