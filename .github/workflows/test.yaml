@@ -90,4 +90,6 @@ jobs:
           name: pip-${{ matrix.runs-on }}-site-packages
           path: |
             ${{ env.pythonLocation }}/**/site-packages/
+            ${{ env.pythonLocation }}/Sripts/
+            ${{ env.pythonLocation }}/bin/
         if: always()
