@@ -22,7 +22,7 @@ build-dir = "cmake-build-scikit"
 build.requires = ["my_pkg_base @ {root:parent:uri}/base"]
 
 [tool.cibuildwheel]
-build = "cp311-*"
+build = "cp312-*"
 
 [tool.cibuildwheel.windows]
 before-build = "pip install delvewheel"

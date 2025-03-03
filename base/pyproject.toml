@@ -19,4 +19,4 @@ if.from-sdist = false
 build-dir = "cmake-build-scikit"
 
 [tool.cibuildwheel]
-build = "cp311-*"
+build = "cp312-*"
