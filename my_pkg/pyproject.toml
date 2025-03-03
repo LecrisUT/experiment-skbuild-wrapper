@@ -23,6 +23,7 @@ build.requires = ["my_pkg_base @ {root:parent:uri}/base"]
 
 [tool.cibuildwheel]
 build = "cp312-*"
+skip = ["*-win32", "*-manylinux_i686"]
 before-build = [
     "pip install --no-index --find-links file:wheelhouse my_pkg_base",
 ]
