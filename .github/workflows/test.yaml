@@ -59,6 +59,8 @@ jobs:
       - uses: lukka/get-cmake@latest
       - run: |
           pip install ./my_pkg ./base -v
+          pip show -f my_pkg
+          pip show -f my_pkg_base
       - run: |
           readelf -d $pythonLocation/lib/python*/site-packages/my_pkg/bin/main
           readelf -d $pythonLocation/lib/python*/site-packages/my_pkg/_run_mod.cpython*
