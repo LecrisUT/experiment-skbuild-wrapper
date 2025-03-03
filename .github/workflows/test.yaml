@@ -38,7 +38,7 @@ jobs:
         if: ${{ matrix.runs-on == 'ubuntu-latest' }}
       - run: |
           echo "::group::pip install"
-          pip install delocate-wheel
+          pip install delocate
           echo "::endgroup::"
           echo "::group::pip wheel"
           pip wheel --wheel-dir wheelhouse/ ./base ./my_pkg
