@@ -23,7 +23,7 @@ build.requires = ["my_pkg_base @ {root:parent:uri}/base"]
 
 [tool.cibuildwheel]
 build = "cp312-*"
-skip = ["*-win32", "*-manylinux_i686"]
+skip = ["*-win32", "*-manylinux_i686", "*-musllinux_*"]
 before-build = [
     "pip install --no-index --find-links file:wheelhouse my_pkg_base",
 ]
@@ -32,7 +32,7 @@ before-build = [
 repair-wheel-command = [
     "export platlib=$(python3 -c 'import sysconfig; print(sysconfig.get_path(\"platlib\"))')",
     "export LD_LIBRARY_PATH=$(echo $platlib/base/lib*):$LD_LIBRARY_PATH",
-    "auditwheel repair -w {dest_dir} {wheel} || true",
+    "auditwheel repair -w {dest_dir} {wheel}",
 ]
 archs = ["x86_64"]
 
