@@ -46,8 +46,7 @@ repair-wheel-command = [
 [tool.cibuildwheel.windows]
 before-build = [
     "pip install delvewheel",
-    "pwd",
-    "pip install wheelhouse\\*.whl",
+    "pip install --no-index --find-links file:wheelhouse my_pkg_base",
 ]
 repair-wheel-command = [
     "$platlib = (python3 -c 'import sysconfig; print(sysconfig.get_path(\"platlib\"))')",
