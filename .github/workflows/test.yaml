@@ -89,10 +89,10 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
-      - uses: pypa/cibuildwheel@v2.23
+      - uses: pypa/cibuildwheel@v2.22
         with:
           package-dir: base
-      - uses: pypa/cibuildwheel@v2.23
+      - uses: pypa/cibuildwheel@v2.22
         with:
           package-dir: my_pkg
       - uses: actions/upload-artifact@v4
