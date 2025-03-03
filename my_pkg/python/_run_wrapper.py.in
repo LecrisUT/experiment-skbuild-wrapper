@@ -5,22 +5,11 @@ import sys
 import os
 from pathlib import Path
 
-_runtime_dlls = "$<TARGET_RUNTIME_DLLS:@target@>"
-
-base_path = Path(__file__).parent.parent / "base"
-print(base_path)
-#if os.name == 'nt':
-#    os.add_dll_directory(base_path/"bin")
-
 def run() -> None:
     exe_path = Path(__file__).parent
     exe_path = exe_path / "@CMAKE_INSTALL_BINDIR@/$<TARGET_FILE_NAME:@target@>"
-    env = os.environ
-#    if os.name == "nt":
-#        env["PATH"] = f"{base_path/"bin"};{env["PATH"]}"
     sys.exit(
         subprocess.call(
-            [str(exe_path)],
-            env=env,
+            [str(exe_path), *sys.arv[2:]]
         )
     )
