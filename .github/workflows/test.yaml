@@ -69,12 +69,6 @@ jobs:
           otool -l $pythonLocation/lib/python*/site-packages/my_pkg/bin/main
           otool -l $pythonLocation/lib/python*/site-packages/my_pkg/_run_mod.cpython*
         if: ${{ matrix.runs-on == 'macos-latest' }}
-      - uses: lorenalexm/install-dumpbin-action@main
-        if: ${{ matrix.runs-on == 'windows-latest' }}
-      - run: |
-          dumpbin /IMPORTS:$pythonLocation/lib/python*/site-packages/my_pkg/bin/main
-          dumpbin /IMPORTS:$pythonLocation/lib/python*/site-packages/my_pkg/_run_mod.cpython*
-        if: ${{ matrix.runs-on == 'windows-latest' }}
       - run: |
           main
         if: always()
