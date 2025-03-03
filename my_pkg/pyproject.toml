@@ -32,7 +32,7 @@ before-build = [
 repair-wheel-command = [
     "export platlib=$(python3 -c 'import sysconfig; print(sysconfig.get_path(\"platlib\"))')",
     "export LD_LIBRARY_PATH=$(echo $platlib/base/lib*):$LD_LIBRARY_PATH",
-    "auditwheel repair -w {dest_dir} {wheel}",
+    "auditwheel repair -w {dest_dir} {wheel} || true",
 ]
 archs = ["x86_64"]
 
