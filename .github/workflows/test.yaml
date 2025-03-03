@@ -64,9 +64,8 @@ jobs:
           echo "::endgroup::"
           echo "::group::auditwheel"
           $platlib = (python3 -c 'import sysconfig; print(sysconfig.get_path("platlib"))')
-          $platlib
           $env:Path += ";$platlib\my_pkg_base\bin"
-          $env:PATH
+          ls $platlib\my_pkg_base\bin
           delvewheel repair -w new_wheelhouse wheelhouse\*
           echo "::endgroup::"
         if: ${{ matrix.runs-on == 'windows-latest' }}
