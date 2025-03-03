@@ -20,3 +20,10 @@ cmake.build-type = "Release"
 if.from-sdist = false
 build-dir = "cmake-build-scikit"
 build.requires = ["my_pkg_base @ {root:parent:uri}/base"]
+
+[tool.cibuildwheel]
+build = "cp311-*"
+
+[tool.cibuildwheel.windows]
+before-build = "pip install delvewheel"
+repair-wheel-command = "delvewheel repair -w {dest_dir} {wheel}"

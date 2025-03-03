@@ -8,7 +8,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  cmake_only:
+  cibuildwheel:
     runs-on: ${{ matrix.runs-on }}
     strategy:
       matrix:
@@ -17,77 +17,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: lukka/get-cmake@latest
-      - run: |
-          cmake -B build_base -S base -DCMAKE_BUILD_TYPE=Release
-          cmake --build build_base --config=release
-          cmake --install build_base --prefix install_base --config=release
-      - run: |
-          cmake -B build_main -S my_pkg -Dbase_ROOT=install_base  -DCMAKE_BUILD_TYPE=Release
-          cmake --build build_main --config=release
-          cmake --install build_main --prefix install_main --config=release
-      - run: |
-          export LD_LIBRARY_PATH=$(echo $(pwd)/install_base/lib*)
-          ./install_main/bin/main
-        if: ${{ matrix.runs-on == 'ubuntu-latest' }}
-      - run: |
-          export DYLD_LIBRARY_PATH=$(echo $(pwd)/install_base/lib*)
-          ./install_main/bin/main
-        if: ${{ matrix.runs-on == 'macos-latest' }}
-      - run: |
-          $env:PATH += ";$pwd\install_base\bin"
-          .\install_main\bin\main
-        if: ${{ matrix.runs-on == 'windows-latest' }}
+      - uses: pypa/cibuildwheel@v2.23
+        with:
+          package-dir: base
+      - uses: pypa/cibuildwheel@v2.23
+        with:
+          package-dir: my_pkg
       - uses: actions/upload-artifact@v4
         with:
-          name: cmake-only-${{ matrix.runs-on }}
-          include-hidden-files: true
-          path: |
-            build_base
-            build_main
-        if: always()
-  pip:
-    runs-on: ${{ matrix.runs-on }}
-    strategy:
-      matrix:
-        runs-on: [ ubuntu-latest, macos-latest, windows-latest ]
-      fail-fast: false
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: 3.x
-      - uses: lukka/get-cmake@latest
-      - run: |
-          pip install ./my_pkg ./base -v
-          pip show -f my_pkg
-          pip show -f my_pkg_base
-      - run: |
-          readelf -d $pythonLocation/lib/python*/site-packages/my_pkg/bin/main
-          readelf -d $pythonLocation/lib/python*/site-packages/my_pkg/_run_mod.cpython*
-        if: ${{ matrix.runs-on == 'ubuntu-latest' }}
-      - run: |
-          otool -l $pythonLocation/lib/python*/site-packages/my_pkg/bin/main
-          otool -l $pythonLocation/lib/python*/site-packages/my_pkg/_run_mod.cpython*
-        if: ${{ matrix.runs-on == 'macos-latest' }}
-      - run: |
-          main
-        if: always()
-      - run: |
-          python3 -c "from my_pkg._run_mod import run_main; run_main()"
-        if: always()
-      - uses: actions/upload-artifact@v4
-        with:
-          name: pip-${{ matrix.runs-on }}
-          include-hidden-files: true
-          path: |
-            base/cmake-build-scikit
-            my_pkg/cmake-build-scikit
-        if: always()
-      - uses: actions/upload-artifact@v4
-        with:
-          name: pip-${{ matrix.runs-on }}-site-packages
-          path: |
-            ${{ env.pythonLocation }}/**/site-packages/
-            ${{ env.pythonLocation }}/Sripts/
-            ${{ env.pythonLocation }}/bin/
-        if: always()
+          name: cibw-wheels-${{ matrix.runs-on }}
+          path: ./wheelhouse/*.whl
