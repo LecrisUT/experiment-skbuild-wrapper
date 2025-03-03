@@ -73,7 +73,7 @@ jobs:
           echo "::endgroup::"
         if: ${{ matrix.runs-on == 'windows-latest' }}
       - run: |
-          pip uninstall my_pkg my_pkg_base
+          pip uninstall -y my_pkg my_pkg_base
           pip install --no-index --find-links file:new_wheelhouse my_pkg_base my_pkg
       - run: main
         if: always()
