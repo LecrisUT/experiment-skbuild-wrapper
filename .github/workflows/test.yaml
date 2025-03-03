@@ -72,6 +72,14 @@ jobs:
           delvewheel repair -w new_wheelhouse wheelhouse\*
           echo "::endgroup::"
         if: ${{ matrix.runs-on == 'windows-latest' }}
+      - run: |
+          pip uninstall my_pkg my_pkg_base
+          pip install --no-index --find-links file:new_wheelhouse my_pkg_base my_pkg
+      - run: main
+        if: always()
+      - run: python3 -c "from my_pkg._run_mod import run_main; run_main()"
+        if: always()
+
 
   cibuildwheel:
     runs-on: ${{ matrix.runs-on }}
