@@ -8,6 +8,69 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  manual:
+    runs-on: ${{ matrix.runs-on }}
+    strategy:
+      matrix:
+        runs-on: [ ubuntu-latest, macos-latest, windows-latest ]
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+      - uses: lukka/get-cmake@latest
+      - run: |
+          echo "::group::pip install"
+          pip install auditwheel
+          echo "::endgroup::"
+          echo "::group::pip wheel"
+          pip wheel --wheel-dir wheelhouse/ ./base ./my_pkg
+          echo "::endgroup::"
+          echo "::group::pip install wheels"
+          pip install --no-index --find-links file:wheelhouse my_pkg_base my_pkg
+          echo "::endgroup::"
+          echo "::group::auditwheel"
+          export platlib=$(python3 -c 'import sysconfig; print(sysconfig.get_path("platlib"))')
+          export LD_LIBRARY_PATH=$(echo $platlib/my_pkg_base/lib*):$LD_LIBRARY_PATH
+          auditwheel repair -w new_wheelhouse wheelhouse/*
+          echo "::endgroup::"
+        if: ${{ matrix.runs-on == 'ubuntu-latest' }}
+      - run: |
+          echo "::group::pip install"
+          pip install delocate-wheel
+          echo "::endgroup::"
+          echo "::group::pip wheel"
+          pip wheel --wheel-dir wheelhouse/ ./base ./my_pkg
+          echo "::endgroup::"
+          echo "::group::pip install wheels"
+          pip install --no-index --find-links file:wheelhouse my_pkg_base my_pkg
+          echo "::endgroup::"
+          echo "::group::auditwheel"
+          export platlib=$(python3 -c 'import sysconfig; print(sysconfig.get_path("platlib"))')
+          export DYLD_LIBRARY_PATH=$(echo $platlib/my_pkg_base/lib*):$DYLD_LIBRARY_PATH
+          delocate-wheel -w new_wheelhouse -v wheelhouse/*
+          echo "::endgroup::"
+        if: ${{ matrix.runs-on == 'macos-latest' }}
+      - run: |
+          echo "::group::pip install"
+          pip install delvewheel
+          echo "::endgroup::"
+          echo "::group::pip wheel"
+          pip wheel --wheel-dir wheelhouse/ ./base ./my_pkg
+          echo "::endgroup::"
+          echo "::group::pip install wheels"
+          pip install --no-index --find-links file:wheelhouse my_pkg_base my_pkg
+          echo "::endgroup::"
+          echo "::group::auditwheel"
+          $platlib = (python3 -c 'import sysconfig; print(sysconfig.get_path("platlib"))')
+          $platlib
+          $env:Path += ";$platlib\my_pkg_base\bin"
+          $env:PATH
+          delvewheel repair -w new_wheelhouse wheelhouse\*
+          echo "::endgroup::"
+        if: ${{ matrix.runs-on == 'windows-latest' }}
+
   cibuildwheel:
     runs-on: ${{ matrix.runs-on }}
     strategy:
