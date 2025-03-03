@@ -49,7 +49,9 @@ jobs:
           echo "::endgroup::"
           echo "::group::auditwheel"
           export platlib=$(python3 -c 'import sysconfig; print(sysconfig.get_path("platlib"))')
+          echo $platlib
           export DYLD_LIBRARY_PATH=$(echo $platlib/my_pkg_base/lib*):$DYLD_LIBRARY_PATH
+          echo $DYLD_LIBRARY_PATH
           delocate-wheel -w new_wheelhouse -v wheelhouse/*
           echo "::endgroup::"
         if: ${{ matrix.runs-on == 'macos-latest' }}
