@@ -24,13 +24,13 @@ build.requires = ["my_pkg_base @ {root:parent:uri}/base"]
 [tool.cibuildwheel]
 build = "cp312-*"
 before-build = [
-    "pip install wheelhouse/*.whl",
+    "pip install --no-index --find-links file:wheelhouse my_pkg_base",
 ]
 
 [tool.cibuildwheel.linux]
 repair-wheel-command = [
     "export platlib=$(python3 -c 'import sysconfig; print(sysconfig.get_path(\"platlib\"))')",
-    "export LD_LIBRARY_PATH=$(echo $platlib/my_pkg_base/lib*):$LD_LIBRARY_PATH",
+    "export LD_LIBRARY_PATH=$(echo $platlib/base/lib*):$LD_LIBRARY_PATH",
     "auditwheel repair -w {dest_dir} {wheel}",
 ]
 
@@ -38,9 +38,7 @@ repair-wheel-command = [
 repair-wheel-command = [
     "export platlib=$(python3 -c 'import sysconfig; print(sysconfig.get_path(\"platlib\"))')",
     "echo $platlib",
-    "echo $(echo $platlib/my_pkg_base/lib*)",
-    "export DYLD_LIBRARY_PATH=$(echo $platlib/my_pkg_base/lib*):$DYLD_LIBRARY_PATH",
-    "echo $DYLD_LIBRARY_PATH",
+    "export DYLD_LIBRARY_PATH=$(echo $platlib/base/lib*):$DYLD_LIBRARY_PATH",
     "delocate-wheel --require-archs {delocate_archs} -w {dest_dir} -v {wheel}",
 ]
 
@@ -52,8 +50,6 @@ before-build = [
 ]
 repair-wheel-command = [
     "$platlib = (python3 -c 'import sysconfig; print(sysconfig.get_path(\"platlib\"))')",
-    "$platlib",
-    '$env:Path += ";$platlib\my_pkg_base\bin"',
-    "$env:Path",
+    '$env:Path += ";$platlib\base\bin"',
     "delvewheel repair -w {dest_dir} {wheel}",
 ]
